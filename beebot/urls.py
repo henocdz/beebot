@@ -16,9 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from chat.views import home
+from chat.views import HomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home)
+    path('', HomeView.as_view())
 ]
