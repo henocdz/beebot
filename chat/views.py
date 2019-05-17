@@ -8,6 +8,11 @@ from chat.models import Chat, TelegramUser, Message
 class HomeView(TemplateView):
     template_name = "index.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['chats'] = Chat.objects.all()
+        return context
+
 
 class TelegramWebhookView(View):
     def post(self, request):

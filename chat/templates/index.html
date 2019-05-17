@@ -104,12 +104,9 @@
 <div id="wrapper">
     <section id="chats">
         <ul>
-            <li><a href="javascript:void(0)">Chat 1</a></li>
-            <li><a href="javascript:void(0)">Chat 2</a></li>
-            <li><a href="javascript:void(0)">Chat 3</a></li>
-            <li><a href="javascript:void(0)">Chat 4</a></li>
-            <li><a href="javascript:void(0)">Chat 5</a></li>
-            <li><a href="javascript:void(0)">Chat 6</a></li>
+            {% for chat in chats %}
+                <li><a href="javascript:void(0)">Chat: {{chat.id}}</a></li>
+            {% endfor %}
         </ul>
     </section>
     <section id="single-chat">
