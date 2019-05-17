@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 
-from chat.views import HomeView
+from chat.views import HomeView, TelegramWebhookView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', HomeView.as_view())
+    path('', HomeView.as_view()),
+    path('webhooks/telegram/', csrf_exempt(TelegramWebhookView.as_view()))
 ]
