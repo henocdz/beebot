@@ -42,7 +42,7 @@
         }
 
         #single-chat {
-            flex: 2;
+            flex: 4;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -105,7 +105,7 @@
     <section id="chats">
         <ul>
             {% for chat in chats %}
-                <li><a href="javascript:void(0)">Chat: {{chat.id}}</a></li>
+                <li><a href="javascript:void(0)" data-id="{{chat.id}}">Chat: {{chat.id}}</a></li>
             {% endfor %}
         </ul>
     </section>
@@ -161,9 +161,28 @@
         </div>
     </section>
 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript">
         const messagesList = document.getElementById("single-chat-messages");
         messagesList.scrollTo(0, messagesList.scrollHeight)
+
+        $(function() {
+            $('#chats').on('click', 'a', function(e){
+                e.preventDefault();
+                const $messagesList = $("#single-chat-messages")
+                const chatId = $(this).data("id")
+                $.get("/api/messages/?chat_id="+chatId, function(data) {
+                    $messagesList.text("");
+                    for (var i = 0; i < data.length; i++) {
+                        const message = data[i]
+                        const className = message.from_user.username === "bee_hack_bot" ? "bee" : "notbee"
+                        const newMessage = $("<li/>").text(message.text).addClass(className)
+                        $messagesList.append(newMessage)
+                    }
+                })
+            })
+        })
+
     </script>
 </div>
 </body>
