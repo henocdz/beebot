@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Chat Rooms</title>
+    <meta name="csrftoken" content="{{csrf_token}}">
     <style type="text/css">
         html, body {
             margin: 0;
@@ -99,6 +100,10 @@
             color: white;
             clear: both;
         }
+
+        button {
+            margin-bottom: 10px
+        }
     </style>
 </head>
 <body>
@@ -118,20 +123,23 @@
         </div>
         <div id="new-message-box">
             <textarea class="message-input" rows="5"></textarea>
-            <button>Enviar</button>
+            <button id="sendMessage">Enviar</button>
         </div>
     </section>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript">
         const messagesList = document.getElementById("single-chat-messages");
+
         messagesList.scrollTo(0, messagesList.scrollHeight)
+        window.chatId = null;
 
         $(function() {
-            $('#chats').on('click', 'a', function(e){
-                e.preventDefault();
+            let chatId
+            const csrftoken = $("meta[name=csrftoken]").attr("content")
+
+            function refreshChat(chatId) {
                 const $messagesList = $("#single-chat-messages")
-                const chatId = $(this).data("id")
                 $.get("/api/messages/?chat_id="+chatId, function(data) {
                     $messagesList.text("");
 
@@ -144,6 +152,24 @@
                         const newMessage = $("<li/>").text(username + ": " + message.text).addClass(className)
                         $messagesList.append(newMessage)
                     }
+                })
+            }
+
+            $('#chats').on('click', 'a', function(e){
+                e.preventDefault();
+                chatId = $(this).data("id")
+                refreshChat(chatId)
+            })
+
+            $("#sendMessage").on("click", function(e) {
+                e.preventDefault()
+                const messageText = $("#new-message-box .message-input").val()
+                $.post("/api/messages/send/", {
+                    chat: chatId,
+                    text: messageText,
+                    csrfmiddlewaretoken: csrftoken
+                }, function(){
+                    refreshChat(chatId)
                 })
             })
         })

@@ -60,7 +60,7 @@ class SendMessageView(CreateAPIView):
 
     def send_to_telegram(self, message):
         requests.post(
-            "https://api.telegram.org/bot/sendMessage",
+            "https://api.telegram.org/bot807995598:AAEaXyolRFsczta6sng9Bt79Vib81KDsFlw/sendMessage",
             data=dict(chat_id=message.chat_id, text=message.text),
         )
 

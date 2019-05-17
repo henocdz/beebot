@@ -28,6 +28,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", HomeView.as_view()),
     path("webhooks/telegram/", csrf_exempt(TelegramWebhookView.as_view())),
+    path("api/messages/send/", csrf_exempt(SendMessageView.as_view())),
     path("api/messages/", RetrieveMessagesView.as_view()),
-    path("api/messages/send/", SendMessageView.as_view()),
 ]
