@@ -2,7 +2,12 @@ import json
 
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse
+
+from rest_framework.generics import ListAPIView
+from django_filters import rest_framework as filters
+
 from chat.models import Chat, TelegramUser, Message
+from chat.serializers import MessageSerializer
 
 
 class HomeView(TemplateView):
@@ -10,7 +15,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['chats'] = Chat.objects.all()
+        context["chats"] = Chat.objects.all()
         return context
 
 
@@ -29,7 +34,7 @@ class TelegramWebhookView(View):
         Message.objects.get_or_create(
             id=message_data["message_id"],
             defaults=dict(
-                text=message_data["text"],
+                text=message_data.get("text", "****"),
                 from_user=from_user,
                 chat=chat,
                 date_timestamp=message_data["date"],
@@ -37,3 +42,10 @@ class TelegramWebhookView(View):
         )
 
         return HttpResponse()
+
+
+class RetrieveMessages(ListAPIView):
+    serializer_class = MessageSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('chat_id',)
+    queryset = Message.objects.all()

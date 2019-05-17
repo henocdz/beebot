@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from chat.views import HomeView, TelegramWebhookView
+from chat.views import HomeView, TelegramWebhookView, RetrieveMessages
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view()),
-    path('webhooks/telegram/', csrf_exempt(TelegramWebhookView.as_view()))
+    path('webhooks/telegram/', csrf_exempt(TelegramWebhookView.as_view())),
+    path('api/messages/', csrf_exempt(RetrieveMessages.as_view()))
 ]
