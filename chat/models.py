@@ -7,7 +7,7 @@ class Chat(models.Model):
     id = models.BigIntegerField(primary_key=True)
 
     def __str__(self):
-        return self.username
+        return self.id
 
 
 class TelegramUser(models.Model):
@@ -26,6 +26,9 @@ class Message(models.Model):
     from_user = models.ForeignKey("chat.TelegramUser", on_delete=models.PROTECT)
     chat = models.ForeignKey("chat.Chat", on_delete=models.PROTECT)
     date_timestamp = models.IntegerField()
+
+    class Meta:
+        ordering = ["date_timestamp"]
 
     def __str__(self):
         return f"{self.from_user.username}: {self.text}"
